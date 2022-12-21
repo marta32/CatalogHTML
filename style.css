@@ -1,0 +1,23 @@
+body{
+    background-color: rgb(217, 219, 219);
+}
+
+#titleStyle{
+  text-align: center;
+  font-size: 60px;
+  padding: 15px;
+  color:rgb(35, 110, 164);
+}
+
+.table {
+    margin: auto;
+    width: 60% !important;
+ }
+
+ .table-hover thead{
+    background-color: rgb(129, 193, 225);
+ }
+
+.btn-block{
+    margin-left: 40%;
+}
