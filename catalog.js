@@ -84,23 +84,33 @@ function showModal2(){
     modal.show();
 }
 
-// PUT request using fetch;
-async function updateStudent(index){
-    const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            firstName: document.querySelector("#firstName").value,
-            lastName: document.querySelector("#lastName").value,
-            birthday: document.querySelector("#birthday").value
-        })
-    };
-    const studId = students[index].id;
-    const response = await fetch('http://localhost:8080/api/students/'+studId, requestOptions);
-    const json = await response.json();
-    modalWrap.remove();
-    document.querySelector(".modal-backdrop").remove();
-    getAllStudents();
+//function for delete student;
+function showModal3(index){
+    if(modalWrap !== null){
+        modalWrap.remove();
+    }
+    modalWrap = document.createElement('div');
+    modalWrap.innerHTML = '<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
+                        + '<div class="modal-dialog" role="document">'
+                        + '<div class="modal-content">'
+                        + '<div class="modal-header">'
+                        + '<h5 class="modal-title" id="buttonModalLabel">Delete student</h5>'
+                        + '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">'
+                        + '</button>'
+                        + '</div>'
+                        + '<div class="modal-body">'
+                        + `<p id="deleteTEXT"> Do you want to delete <b>${students[index].firstName} ${students[index].lastName}</b> from school catalog? </p>`
+                        + '</div>'
+                        + '<div class="modal-footer">'
+                        + `<button type="button" class="btn btn-primary" onclick = deleteStudent(${index})>YES</button>`
+                        + `<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>`
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+    document.body.append(modalWrap);
+    var modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
+    modal.show();
 }
 
 // GET request using fetch;
@@ -126,7 +136,7 @@ async function getAllStudents(){
 
         td3.innerHTML = "<button type='button' class='btn' data-toggle='modal' title='Add grades' data-target='#addMarkButton'><i class='fa fa-pencil-square-o aria-hidden='true'></i></button>"
                       +"<button type='button' class='btn' data-toggle='modal' title='Edit student' data-target='#exampleModal1' onclick=showModal1("+(i-1)+")><i class='fa fa-eraser'></i></button>"
-                      +"<button type='button' class='btn' data-toggle='modal' title='Delete student' data-target='#deleteButton'><i class='fa fa-trash'></i></button>";
+                      +"<button type='button' class='btn' data-toggle='modal' title='Delete student' data-target='#deleteButton' onclick=showModal3("+(i-1)+")><i class='fa fa-trash'></i></button>";
         th.innerHTML = i;
         // th.setAttribute('scope','row');
         i = i+1;
@@ -157,4 +167,35 @@ async function addStudent(){
     modalWrap.remove();
     document.querySelector(".modal-backdrop").remove();
     getAllStudents();
+}
+
+// PUT request using fetch;
+async function updateStudent(index){
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
+            birthday: document.querySelector("#birthday").value
+        })
+    };
+    const studId = students[index].id;
+    const response = await fetch('http://localhost:8080/api/students/'+studId, requestOptions);
+    const json = await response.json();
+    modalWrap.remove();
+    document.querySelector(".modal-backdrop").remove();
+    getAllStudents();
+}
+
+//DELETE request using fetch;
+async function deleteStudent(index){
+    const element1 = document.querySelector("#deleteTEXT");
+    const element2 = document.querySelector(".modal-backdrop");
+    const studId = students[index].id;
+    await fetch('http://localhost:8080/api/students/'+studId, {method: 'DELETE'})
+        .then( () => element1.innerHTML ='The student is removed by school catalog!');
+    setTimeout(() => {modalWrap.remove(),
+        element2.remove(),
+        getAllStudents();}, 3000);
 }
