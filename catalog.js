@@ -1,12 +1,13 @@
 var modalWrap = null;
 var students = null;
 
+// function for update a student;
 function showModal1(index){
     if(modalWrap !== null){
         modalWrap.remove();
     }
     modalWrap = document.createElement('div');
-    modalWrap.innerHTML = '<div class="modal fade" id="buttonModal" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
+    modalWrap.innerHTML = '<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
                         + '<div class="modal-dialog" role="document">'
                         + '<div class="modal-content">'
                         + '<div class="modal-header">'
@@ -31,7 +32,7 @@ function showModal1(index){
                         + '</form>'
                         + '</div>'
                         + '<div class="modal-footer">'
-                        // + `<button type="button" class="btn btn-primary" onclick="updateStudent(students[index])">Save</button>`
+                        + `<button type="button" class="btn btn-primary" onclick="updateStudent(${index})">Save</button>`
                         + '</div>'
                         + '</div>'
                         + '</div>'
@@ -41,31 +42,68 @@ function showModal1(index){
     modal.show();
 }
 
-// async function updateStudent(upStudent){
+// function for create astudent;
+function showModal2(){
+    if(modalWrap !== null){
+        modalWrap.remove();
+    }
+    modalWrap = document.createElement('div');
+    modalWrap.setAttribute("id", "modalWrap2");
+    modalWrap.innerHTML = '<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
+                        + '<div class="modal-dialog" role="document">'
+                        + '<div class="modal-content">'
+                        + '<div class="modal-header">'
+                        + '<h5 class="modal-title" id="buttonModalLabel">Edit student</h5>'
+                        + '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">'
+                        + '</button>'
+                        + '</div>'
+                        + '<div class="modal-body">'
+                        + '<form>'
+                        + '<div class="form-group">'
+                        + '<label for="fname" class="col-form-label">First name</label>'
+                        + `<input type="text" class="form-control" value="Sara" id="firstName">`
+                        + '</div>'
+                        + '<div class="form-group">'
+                        + '<label for="lname" class="col-form-label">Last name</label>'
+                        + `<input type="text" class="form-control" value="Pop" id="lastName"></input>`
+                        + '</div>'
+                        + '<div class="form-group">'
+                        + '<label for="birthday" class="col-form-label">Birthday</label>'
+                        + `<input type="date" class="form-control" value="2012-12-12" id="birthday"></input>`
+                        + '</div>'
+                        + '</form>'
+                        + '</div>'
+                        + '<div class="modal-footer">'
+                        + `<button type="button" class="btn btn-primary" onclick="addStudent()">Save</button>`
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+    document.body.append(modalWrap);
+    var modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
+    modal.show();
+}
 
-//     const newStudent = {
-//         firstName: upStudent.firstName,
-//         lastName: upStudent.lastName,
-//         birthday: upStudent.birthday,
-//     };
+// PUT request using fetch;
+async function updateStudent(index){
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
+            birthday: document.querySelector("#birthday").value
+        })
+    };
+    const studId = students[index].id;
+    const response = await fetch('http://localhost:8080/api/students/'+studId, requestOptions);
+    const json = await response.json();
+    modalWrap.remove();
+    document.querySelector(".modal-backdrop").remove();
+    getAllStudents();
+}
 
-//     // console.log(upStudent);
-
-//     // const requestOptions = {
-//     //     method: 'PUT',
-//     //     headers: { 'Content-Type': 'application/json' },
-//     //     body: JSON.stringify(body)
-//     // };
-
-//     const upResponse = await fetch('http://localhost:8080/api/students/10');
-//     const json = await upResponse.json();
-//     // console.log(json);
-    
-//     getAllStudents();
-// }
-
-// GET request using fetch
-
+// GET request using fetch;
 async function getAllStudents(){
     const studentTable = document.querySelector('#studentTable');
     const response = await fetch('http://localhost:8080/api/students?pageNo=0&pageSize=100');
@@ -87,7 +125,7 @@ async function getAllStudents(){
         td2.innerHTML = student.lastName;
 
         td3.innerHTML = "<button type='button' class='btn' data-toggle='modal' title='Add grades' data-target='#addMarkButton'><i class='fa fa-pencil-square-o aria-hidden='true'></i></button>"
-                      +"<button type='button' class='btn' data-toggle='modal' title='Edit student' data-target='#exampleModal' onclick=showModal1("+(i-1)+")><i class='fa fa-eraser'></i></button>"
+                      +"<button type='button' class='btn' data-toggle='modal' title='Edit student' data-target='#exampleModal1' onclick=showModal1("+(i-1)+")><i class='fa fa-eraser'></i></button>"
                       +"<button type='button' class='btn' data-toggle='modal' title='Delete student' data-target='#deleteButton'><i class='fa fa-trash'></i></button>";
         th.innerHTML = i;
         // th.setAttribute('scope','row');
@@ -103,3 +141,20 @@ async function getAllStudents(){
 
 }
 window.onload = () => getAllStudents();
+
+// POST request using fetch;
+async function addStudent(){
+    const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ firstName: document.querySelector('#firstName').value,
+                                   lastName: document.querySelector('#lastName').value,
+                                   birthday: document.querySelector('#birthday').value
+        })
+    };
+    const response =  await fetch('http://localhost:8080/api/students', requestOptions);
+    const stud = await response.json();
+    modalWrap.remove();
+    document.querySelector(".modal-backdrop").remove();
+    getAllStudents();
+}
