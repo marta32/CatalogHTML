@@ -116,7 +116,7 @@ function showModal3(index){
 // GET request using fetch;
 async function getAllStudents(){
     const studentTable = document.querySelector('#studentTable');
-    const response = await fetch('http://localhost:8080/api/students?pageNo=0&pageSize=100');
+    const response = await fetch('http://localhost:8080/api/students?pageNo=0&pageSize=15');
     const json = await response.json();
 
     studentTable.removeChild(studentTable.getElementsByTagName('tbody')[0]);
