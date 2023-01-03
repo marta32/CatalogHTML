@@ -1,3 +1,24 @@
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+  
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+   
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: rgb(35, 110, 164); 
+        border-radius: 10px;
+    }
+  
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+  }
+
 body{
     background-color: rgb(217, 219, 219);
 }
@@ -9,15 +30,45 @@ body{
   color:rgb(35, 110, 164);
 }
 
-.table {
+#studentTable {
     margin: auto;
     width: 60% !important;
  }
 
- .table-hover thead{
+.table-hover thead{
     background-color: rgb(129, 193, 225);
- }
+}
 
 .btn-block{
     margin-left: 40%;
+}
+
+.btn-primary{
+    background-color: rgb(35, 110, 164) !important;
+    border-color: rgb(35, 110, 164) !important;
+    align-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.subjectName{
+    text-align: center;
+}
+.gradesTable{
+    border: 2px solid black;
+    align-content: space-between;
+
+}
+.main{
+    display:inline-flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.addGradeButton{
+    text-align: center;
+    padding: 15px;
 }

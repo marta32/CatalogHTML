@@ -90,7 +90,7 @@ function showModal3(index){
         modalWrap.remove();
     }
     modalWrap = document.createElement('div');
-    modalWrap.innerHTML = '<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
+    modalWrap.innerHTML = '<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="buttonModalLabel" aria-hidden="true">'
                         + '<div class="modal-dialog" role="document">'
                         + '<div class="modal-content">'
                         + '<div class="modal-header">'
@@ -103,7 +103,7 @@ function showModal3(index){
                         + '</div>'
                         + '<div class="modal-footer">'
                         + `<button type="button" class="btn btn-primary" onclick = deleteStudent(${index})>YES</button>`
-                        + `<button type="button" class="btn btn-primary" data-bs-dismiss="modal">NO</button>`
+                        + `<button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">NO</button>`
                         + '</div>'
                         + '</div>'
                         + '</div>'
@@ -134,9 +134,9 @@ async function getAllStudents(){
         td1.innerHTML = student.firstName;
         td2.innerHTML = student.lastName;
 
-        td3.innerHTML = "<button type='button' class='btn' data-toggle='modal' title='Add grades' data-target='#addMarkButton'><i class='fa fa-pencil-square-o aria-hidden='true'></i></button>"
+        td3.innerHTML = `<button type='button' class='btn' data-toggle='modal' title='View all grades'><a href='grades.html?student=${student.id}&name=${student.firstName+' '+student.lastName}' target=_blank style='color:#050505'><i class='fa fa-pencil-square-o aria-hidden='true'></i></a></button>`
                       +"<button type='button' class='btn' data-toggle='modal' title='Edit student' data-target='#exampleModal1' onclick=showModal1("+(i-1)+")><i class='fa fa-eraser'></i></button>"
-                      +"<button type='button' class='btn' data-toggle='modal' title='Delete student' data-target='#deleteButton' onclick=showModal3("+(i-1)+")><i class='fa fa-trash'></i></button>";
+                      +"<button type='button' class='btn' data-toggle='modal' title='Delete student' data-target='exampleModal3' onclick=showModal3("+(i-1)+")><i class='fa fa-trash'></i></button>";
         th.innerHTML = i;
         // th.setAttribute('scope','row');
         i = i+1;
@@ -148,7 +148,6 @@ async function getAllStudents(){
         
         studentTable.getElementsByTagName('tbody')[0].appendChild(tr);
       })
-
 }
 window.onload = () => getAllStudents();
 
